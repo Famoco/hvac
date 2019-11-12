@@ -599,7 +599,7 @@ class Transit(VaultApiBase):
         return resposne.json()
 
     def sign_data(self, name, hash_input, key_version=None, hash_algorithm="sha2-256", context="", prehashed=False,
-                  signature_algorithm="pss", mount_point=DEFAULT_MOUNT_POINT):
+                  signature_algorithm="pss", pss_salt_length="auto", mount_point=DEFAULT_MOUNT_POINT):
         """Return the cryptographic signature of the given data using the named key and the specified hash algorithm.
 
         The key must be of a type that supports signing.
@@ -618,6 +618,9 @@ class Transit(VaultApiBase):
             ed25519 which specifies its own hash algorithm). This can also be specified as part of the URL.
             Currently-supported algorithms are: sha2-224, sha2-256, sha2-384, sha2-512
         :type hash_algorithm: str | unicode
+        :param pss_salt_length: When the signature algorithm is pss, specifies the salt length. Supported pss salt
+            length: hash (-1), auto (0) or a string number
+        :type pss_salt_length: str | unicode
         :param context: Base64 encoded context for key derivation. Required if key derivation is enabled; currently only
             available with ed25519 keys.
         :type context: str | unicode
@@ -651,6 +654,7 @@ class Transit(VaultApiBase):
             'input': hash_input,
             'key_version': key_version,
             'hash_algorithm': hash_algorithm,
+            'pss_salt_length': pss_salt_length,
             'context': context,
             'prehashed': prehashed,
             'signature_algorithm': signature_algorithm,
